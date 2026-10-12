@@ -1,0 +1,16 @@
+name: Wrong reaction
+description: Two things met and did the wrong thing
+body:
+  - type: input
+    id: mix
+    attributes:
+      label: What did you mix?
+      placeholder: "oil, then a spark"
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
