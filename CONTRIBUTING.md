@@ -5,7 +5,7 @@ The most useful thing you can send is a combination that behaves wrongly: two th
 ## Where things live
 
 - `engine.js` holds the rules for every material and how they react.
-- `index.html` is the page, the brush and the buttons.
+- `index.html` is the page: the canvas and the buttons.
 - `tests/engine.test.js` covers the rules.
 
 ## Running it
