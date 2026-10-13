@@ -1,5 +1,7 @@
 # Alchemy Sandbox
 
+[![ci](https://github.com/PKusch/alchemy/actions/workflows/ci.yml/badge.svg)](https://github.com/PKusch/alchemy/actions/workflows/ci.yml)
+
 A tiny world where everything reacts to everything else. Pour, burn, boil and grow. It is one web page: no install, no build, works offline.
 
 **Play it: https://pkusch.github.io/alchemy/**
