@@ -118,3 +118,9 @@ test('ash floats on water instead of sinking', () => {
   assert.equal(w.get(1, 4), A.WATER);
   assert.equal(w.get(1, 3), A.ASH);
 });
+
+test('painting outside the world is ignored', () => {
+  const w = new World(4, 4);
+  assert.doesNotThrow(() => { w.paint(-1, 0, A.SAND); w.paint(0, -1, A.SAND); w.paint(4, 0, A.SAND); w.paint(0, 4, A.SAND); });
+  assert.equal(w.count(A.SAND), 0);
+});
