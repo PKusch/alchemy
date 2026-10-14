@@ -109,3 +109,12 @@ test('fire lights oil next to it, so a spark takes the whole slick', () => {
   run(w, 200);
   assert.equal(w.count(A.OIL), 0);
 });
+
+test('ash floats on water instead of sinking', () => {
+  const w = new World(3, 6); floor(w);
+  w.set(0, 4, A.WALL); w.set(2, 4, A.WALL); w.set(0, 3, A.WALL); w.set(2, 3, A.WALL);
+  w.set(1, 4, A.WATER); w.set(1, 3, A.ASH);
+  run(w, 10);
+  assert.equal(w.get(1, 4), A.WATER);
+  assert.equal(w.get(1, 3), A.ASH);
+});
