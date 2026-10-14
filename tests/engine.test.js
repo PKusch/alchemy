@@ -101,3 +101,11 @@ test('painting never overwrites, erasing does', () => {
   w.paint(1, 1, A.SAND); assert.equal(w.get(1, 1), A.WALL);
   w.paint(1, 1, A.EMPTY); assert.equal(w.get(1, 1), A.EMPTY);
 });
+
+test('fire lights oil next to it, so a spark takes the whole slick', () => {
+  const w = new World(12, 4, 5); floor(w);
+  for (let x = 1; x < 11; x++) w.set(x, 2, A.OIL);
+  w.set(0, 2, A.FIRE);
+  run(w, 200);
+  assert.equal(w.count(A.OIL), 0);
+});
