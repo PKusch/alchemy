@@ -124,3 +124,10 @@ test('painting outside the world is ignored', () => {
   assert.doesNotThrow(() => { w.paint(-1, 0, A.SAND); w.paint(0, -1, A.SAND); w.paint(4, 0, A.SAND); w.paint(0, 4, A.SAND); });
   assert.equal(w.count(A.SAND), 0);
 });
+
+test('sand is never lost or made while it falls and piles up', () => {
+  const w = new World(8, 12, 7); floor(w);
+  for (let x = 1; x < 7; x++) for (let y = 0; y < 3; y++) w.set(x, y, A.SAND);
+  run(w, 100);
+  assert.equal(w.count(A.SAND), 18);
+});
