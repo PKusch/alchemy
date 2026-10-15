@@ -6,8 +6,6 @@ A tiny world where everything reacts to everything else. Pour, burn, boil and gr
 
 **Play it: https://pkusch.github.io/alchemy/**
 
-Keys: the number keys pick a material, **Space** pauses and plays, and **C** clears the world.
-
 ## Things to try
 
 - Drop **seeds** into **water** and watch a garden grow.
@@ -15,7 +13,7 @@ Keys: the number keys pick a material, **Space** pauses and plays, and **C** cle
 - Let **lava** meet water: it boils into steam, the steam drifts up and rains back down, and the lava cools into stone.
 - Burn a garden and it leaves **ash** that floats on the water.
 
-Pick materials with the buttons or keys 1 to 9. "Surprise me" resets to a ready-made scene.
+Pick materials with the buttons or keys 1 to 9. **Space** pauses and plays, and **C** clears the world. "Surprise me" resets to a ready-made scene.
 
 ## How it works
 
