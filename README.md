@@ -6,6 +6,8 @@ A tiny world where everything reacts to everything else. Pour, burn, boil and gr
 
 **Play it: https://pkusch.github.io/alchemy/**
 
+Keys: the number keys pick a material, **Space** pauses and plays, and **C** clears the world.
+
 ## Things to try
 
 - Drop **seeds** into **water** and watch a garden grow.

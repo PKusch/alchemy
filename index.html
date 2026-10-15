@@ -62,7 +62,13 @@ function select(t) {
   [...pal.children].forEach(b => b.classList.toggle('on', +b.dataset.t === t));
 }
 select(A.SAND);
-addEventListener('keydown', e => { const t = TOOLS[+e.key - 1]; if (t !== undefined) select(t); });
+addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const t = TOOLS[+e.key - 1]; if (t !== undefined) select(t);
+  if (e.target.tagName === 'BUTTON') return; // a focused button already answers Space itself
+  if (e.key === ' ') { e.preventDefault(); document.getElementById('pause').click(); }
+  if (e.key === 'c' || e.key === 'C') document.getElementById('clear').click();
+});
 
 function pos(e) {
   const r = canvas.getBoundingClientRect();
