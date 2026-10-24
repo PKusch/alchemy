@@ -1,8 +1,8 @@
 // The physics of the sandbox. No browser code in here, so it can be tested in Node.
 (function (root) {
   const EMPTY = 0, WALL = 1, SAND = 2, WATER = 3, FIRE = 4, SEED = 5,
-        PLANT = 6, ASH = 7, OIL = 8, STEAM = 9, LAVA = 10, STONE = 11;
-  const NAMES = ['erase', 'wall', 'sand', 'water', 'fire', 'seed', 'plant', 'ash', 'oil', 'steam', 'lava', 'stone'];
+        PLANT = 6, ASH = 7, OIL = 8, STEAM = 9, LAVA = 10, STONE = 11, ICE = 12;
+  const NAMES = ['erase', 'wall', 'sand', 'water', 'fire', 'seed', 'plant', 'ash', 'oil', 'steam', 'lava', 'stone', 'ice'];
   // How heavy each thing is. A falling thing sinks through anything lighter.
   const DENSITY = [];
   DENSITY[EMPTY] = 0; DENSITY[STEAM] = -1; DENSITY[OIL] = 1; DENSITY[ASH] = 1.5;
@@ -70,6 +70,7 @@
         if (this.moved[i] === this.tick) continue;
         const t = this.cells[i];
         if (t === EMPTY || t === WALL || t === STONE) continue;
+        if (t === ICE) { this.frost(x, y); continue; }
         if (t === LAVA) this.heat(x, y, i);
         if (this.cells[i] !== t) continue;
         if (FALLS.has(t)) this.fall(t, x, y, i);
@@ -113,6 +114,7 @@
           this.set(x + dx, y + dy, STEAM);
           return this.set(x, y, STEAM);
         }
+        if (n === ICE) { this.set(x + dx, y + dy, WATER); continue; }
         if ((n === PLANT || n === SEED) && r() < 0.15) this.set(x + dx, y + dy, FIRE);
         else if (n === OIL && r() < 0.5) this.set(x + dx, y + dy, FIRE);
       }
@@ -149,7 +151,9 @@
     for (let dy = -1; dy <= 1; dy++) {
       for (let dx = -1; dx <= 1; dx++) {
         const n = this.get(x + dx, y + dy);
-        if (n === WATER) {
+        if (n === ICE) {
+          this.set(x + dx, y + dy, WATER);
+        } else if (n === WATER) {
           this.set(x + dx, y + dy, STEAM);
           if (r() < 0.3) return this.set(x, y, STONE);
         } else if ((n === PLANT || n === SEED || n === OIL) && r() < 0.4) this.set(x + dx, y + dy, FIRE);
@@ -158,13 +162,21 @@
     }
   };
 
+  // Ice slowly freezes water beside it, so a cold block spreads over a pond.
+  World.prototype.frost = function (x, y) {
+    if (this.rand() > 0.02) return;
+    const spots = [[0, -1], [-1, 0], [1, 0], [0, 1]];
+    const s = spots[(this.rand() * spots.length) | 0];
+    if (this.get(x + s[0], y + s[1]) === WATER) this.set(x + s[0], y + s[1], ICE);
+  };
+
   World.prototype.count = function (t) {
     let n = 0;
     for (let i = 0; i < this.cells.length; i++) if (this.cells[i] === t) n++;
     return n;
   };
 
-  const api = { World, NAMES, EMPTY, WALL, SAND, WATER, FIRE, SEED, PLANT, ASH, OIL, STEAM, LAVA, STONE, mulberry32 };
+  const api = { World, NAMES, EMPTY, WALL, SAND, WATER, FIRE, SEED, PLANT, ASH, OIL, STEAM, LAVA, STONE, ICE, mulberry32 };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Alchemy = api;
 })(this);

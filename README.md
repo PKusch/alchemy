@@ -12,8 +12,9 @@ A tiny world where everything reacts to everything else. Pour, burn, boil and gr
 - Pour **oil** over the water, then drop a spark. The whole surface goes up.
 - Let **lava** meet water: it boils into steam, the steam drifts up and rains back down, and the lava cools into stone.
 - Burn a garden and it leaves **ash** that floats on the water.
+- Drop **ice** into a pond and it slowly freezes the water around it. Put fire or lava next to it and it melts.
 
-Pick materials with the buttons or keys 1 to 9. **Space** pauses and plays, and **C** clears the world. "Surprise me" resets to a ready-made scene.
+Pick materials with the buttons or keys 1 to 9 and 0 (ice). **Space** pauses and plays, and **C** clears the world. "Surprise me" resets to a ready-made scene.
 
 ## How it works
 

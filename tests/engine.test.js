@@ -131,3 +131,31 @@ test('sand is never lost or made while it falls and piles up', () => {
   run(w, 100);
   assert.equal(w.count(A.SAND), 18);
 });
+
+test('ice does not move', () => {
+  const w = new World(5, 5); w.set(2, 2, A.ICE); run(w, 20);
+  assert.equal(w.get(2, 2), A.ICE);
+});
+
+test('fire melts ice into water', () => {
+  const w = new World(5, 5); floor(w);
+  w.set(2, 3, A.ICE); w.set(2, 2, A.FIRE);
+  run(w, 3);
+  assert.equal(w.count(A.ICE), 0);
+  assert.ok(w.count(A.WATER) + w.count(A.STEAM) >= 1);
+});
+
+test('lava melts ice', () => {
+  const w = new World(5, 6); floor(w);
+  w.set(2, 4, A.ICE); w.set(2, 3, A.LAVA);
+  run(w, 3);
+  assert.equal(w.count(A.ICE), 0);
+});
+
+test('ice slowly freezes water beside it', () => {
+  const w = new World(5, 5); floor(w);
+  for (let x = 0; x < 5; x++) w.set(x, 3, A.WATER);
+  w.set(2, 2, A.ICE);
+  run(w, 600);
+  assert.ok(w.count(A.ICE) > 1, 'the ice should have spread');
+});
