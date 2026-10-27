@@ -166,3 +166,9 @@ test('steam that touches ice turns back into water', () => {
   assert.equal(w.count(A.STEAM), 0);
   assert.ok(w.count(A.WATER) >= 1);
 });
+
+test('a plant with no water beside it never grows', () => {
+  const w = new World(7, 7); floor(w); w.set(3, 5, A.PLANT);
+  run(w, 300);
+  assert.equal(w.count(A.PLANT), 1);
+});
