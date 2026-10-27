@@ -172,3 +172,9 @@ test('a plant with no water beside it never grows', () => {
   run(w, 300);
   assert.equal(w.count(A.PLANT), 1);
 });
+
+test('lava sets a plant beside it alight', () => {
+  const w = new World(5, 5); floor(w); w.set(1, 3, A.LAVA); w.set(2, 3, A.PLANT);
+  run(w, 40);
+  assert.equal(w.count(A.PLANT), 0, 'the plant should have burned');
+});
