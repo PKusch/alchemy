@@ -159,3 +159,10 @@ test('ice slowly freezes water beside it', () => {
   run(w, 600);
   assert.ok(w.count(A.ICE) > 1, 'the ice should have spread');
 });
+
+test('steam that touches ice turns back into water', () => {
+  const w = new World(5, 5); w.set(2, 2, A.STEAM); w.set(2, 1, A.ICE);
+  run(w, 3);
+  assert.equal(w.count(A.STEAM), 0);
+  assert.ok(w.count(A.WATER) >= 1);
+});

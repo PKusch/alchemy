@@ -99,6 +99,8 @@
   World.prototype.rise = function (x, y, i) {
     const w = this.w, r = this.rand;
     if (--this.life[i] === 0) return this.set(x, y, WATER);
+    // steam that touches ice cools straight back into water
+    if (this.get(x, y - 1) === ICE || this.get(x - 1, y) === ICE || this.get(x + 1, y) === ICE) return this.set(x, y, WATER);
     const d = r() < 0.5 ? -1 : 1;
     if (this.get(x, y - 1) === EMPTY && r() < 0.8) return this.swap(i, i - w);
     if (this.get(x + d, y - 1) === EMPTY) return this.swap(i, i - w + d);
