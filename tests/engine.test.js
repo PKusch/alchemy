@@ -178,3 +178,25 @@ test('lava sets a plant beside it alight', () => {
   run(w, 40);
   assert.equal(w.count(A.PLANT), 0, 'the plant should have burned');
 });
+
+test('salt falls like sand and settles on the floor', () => {
+  const w = new World(5, 8); floor(w); w.set(2, 0, A.SALT);
+  run(w, 20);
+  assert.equal(w.get(2, 6), A.SALT);
+});
+
+test('salt melts the ice it lands on and is used up', () => {
+  const w = new World(5, 6); floor(w);
+  w.set(2, 4, A.ICE); w.set(2, 1, A.SALT);
+  run(w, 80);
+  assert.equal(w.count(A.ICE), 0);
+  assert.equal(w.count(A.SALT), 0);
+});
+
+test('salt sinks through water instead of floating', () => {
+  const w = new World(3, 8); floor(w);
+  for (let y = 4; y < 7; y++) for (let x = 0; x < 3; x++) w.set(x, y, A.WATER);
+  w.set(1, 2, A.SALT);
+  run(w, 8);
+  assert.ok(w.get(1, 2) !== A.SALT);
+});
