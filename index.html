@@ -32,7 +32,7 @@
   <button id="clear">Clear</button>
   <button id="demo">Surprise me</button>
 </div>
-<div class="hint">Drop seeds into water to grow a garden. Light it. Pour oil on the water first. Lava melts sand into wall and boils the sea. Ice melts near fire and lava, and slowly freezes water beside it. Keys 1–9 and 0 pick a material.</div>
+<div class="hint">Drop seeds into water to grow a garden. Light it. Pour oil on the water first. Lava melts sand into wall and boils the sea. Ice melts near fire and lava, and slowly freezes water beside it. Salt melts ice. Keys 1–9 and 0 pick a material.</div>
 <script src="engine.js"></script>
 <script>
 const A = Alchemy, W = 240, H = 180;
@@ -44,9 +44,9 @@ const COLORS = {
   [A.WATER]: [52, 116, 224], [A.FIRE]: [255, 140, 30], [A.SEED]: [180, 230, 90],
   [A.PLANT]: [40, 170, 70], [A.ASH]: [120, 118, 122], [A.OIL]: [96, 60, 40],
   [A.STEAM]: [190, 200, 220], [A.LAVA]: [240, 70, 20], [A.STONE]: [70, 62, 66],
-  [A.ICE]: [170, 220, 240],
+  [A.ICE]: [170, 220, 240], [A.SALT]: [238, 236, 230],
 };
-const TOOLS = [A.SAND, A.WATER, A.FIRE, A.SEED, A.OIL, A.LAVA, A.WALL, A.PLANT, A.EMPTY, A.ICE];
+const TOOLS = [A.SAND, A.WATER, A.FIRE, A.SEED, A.OIL, A.LAVA, A.WALL, A.PLANT, A.EMPTY, A.ICE, A.SALT];
 let tool = A.SAND, paused = false, down = false, last = null;
 
 const pal = document.getElementById('palette');
