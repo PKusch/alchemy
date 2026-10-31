@@ -35,3 +35,5 @@ python3 -m http.server   # then open http://localhost:8000
 ```bash
 node --test tests/engine.test.js
 ```
+
+Thirty-five tests cover how each material falls, flows, burns, melts, freezes, dissolves or explodes, and that the same seed always gives the same world.
