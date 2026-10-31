@@ -265,3 +265,11 @@ test('acid leaves water and ice alone', () => {
   run(w, 100);
   assert.ok(w.count(A.WATER) + w.count(A.ICE) >= 2);
 });
+
+test('acid eats through a wall it rests on', () => {
+  const w = new World(3, 4);
+  for (let x = 0; x < 3; x++) w.set(x, 3, A.WALL);
+  w.set(1, 2, A.ACID);
+  run(w, 400);
+  assert.ok(w.count(A.WALL) < 3);
+});
