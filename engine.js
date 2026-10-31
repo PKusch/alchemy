@@ -1,13 +1,13 @@
 // The physics of the sandbox. No browser code in here, so it can be tested in Node.
 (function (root) {
   const EMPTY = 0, WALL = 1, SAND = 2, WATER = 3, FIRE = 4, SEED = 5,
-        PLANT = 6, ASH = 7, OIL = 8, STEAM = 9, LAVA = 10, STONE = 11, ICE = 12, SALT = 13;
-  const NAMES = ['erase', 'wall', 'sand', 'water', 'fire', 'seed', 'plant', 'ash', 'oil', 'steam', 'lava', 'stone', 'ice', 'salt'];
+        PLANT = 6, ASH = 7, OIL = 8, STEAM = 9, LAVA = 10, STONE = 11, ICE = 12, SALT = 13, POWDER = 14;
+  const NAMES = ['erase', 'wall', 'sand', 'water', 'fire', 'seed', 'plant', 'ash', 'oil', 'steam', 'lava', 'stone', 'ice', 'salt', 'powder'];
   // How heavy each thing is. A falling thing sinks through anything lighter.
   const DENSITY = [];
   DENSITY[EMPTY] = 0; DENSITY[STEAM] = -1; DENSITY[OIL] = 1; DENSITY[ASH] = 1.5;
-  DENSITY[SEED] = 1.8; DENSITY[WATER] = 2; DENSITY[SALT] = 2.5; DENSITY[SAND] = 3; DENSITY[LAVA] = 4;
-  const FALLS = new Set([SAND, SALT, ASH, SEED, WATER, OIL, LAVA]);
+  DENSITY[SEED] = 1.8; DENSITY[WATER] = 2; DENSITY[SALT] = 2.5; DENSITY[POWDER] = 2.8; DENSITY[SAND] = 3; DENSITY[LAVA] = 4;
+  const FALLS = new Set([SAND, SALT, POWDER, ASH, SEED, WATER, OIL, LAVA]);
   const FLOWS = new Set([WATER, OIL, LAVA]);
 
   function mulberry32(a) {
@@ -73,6 +73,8 @@
         if (t === ICE) { this.frost(x, y); continue; }
         if (t === LAVA) this.heat(x, y, i);
         if (t === SALT) this.dissolve(x, y);
+        if (t === POWDER) this.detonate(x, y);
+        if (this.cells[i] !== t) continue;
         if (this.cells[i] !== t) continue;
         if (FALLS.has(t)) this.fall(t, x, y, i);
         else if (t === FIRE) this.burn(x, y, i);
@@ -187,13 +189,29 @@
       }
   };
 
+  // Powder next to fire or lava goes off: it becomes fire and throws a flash into
+  // the empty cells around it, which lights the powder beside it in turn.
+  World.prototype.detonate = function (x, y) {
+    let lit = false;
+    for (let dy = -1; dy <= 1 && !lit; dy++)
+      for (let dx = -1; dx <= 1; dx++) {
+        const n = this.get(x + dx, y + dy);
+        if (n === FIRE || n === LAVA) { lit = true; break; }
+      }
+    if (!lit) return;
+    this.set(x, y, FIRE);
+    for (let dy = -2; dy <= 2; dy++)
+      for (let dx = -2; dx <= 2; dx++)
+        if (this.get(x + dx, y + dy) === EMPTY && this.rand() < 0.5) this.set(x + dx, y + dy, FIRE);
+  };
+
   World.prototype.count = function (t) {
     let n = 0;
     for (let i = 0; i < this.cells.length; i++) if (this.cells[i] === t) n++;
     return n;
   };
 
-  const api = { World, NAMES, EMPTY, WALL, SAND, WATER, FIRE, SEED, PLANT, ASH, OIL, STEAM, LAVA, STONE, ICE, SALT, mulberry32 };
+  const api = { World, NAMES, EMPTY, WALL, SAND, WATER, FIRE, SEED, PLANT, ASH, OIL, STEAM, LAVA, STONE, ICE, SALT, POWDER, mulberry32 };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Alchemy = api;
 })(this);

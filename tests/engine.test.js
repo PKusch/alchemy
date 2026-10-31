@@ -200,3 +200,24 @@ test('salt sinks through water instead of floating', () => {
   run(w, 8);
   assert.ok(w.get(1, 2) !== A.SALT);
 });
+
+test('powder falls like sand and sits still until lit', () => {
+  const w = new World(5, 8); floor(w); w.set(2, 0, A.POWDER);
+  run(w, 20);
+  assert.equal(w.get(2, 6), A.POWDER);
+});
+
+test('a spark sets off a whole pile of powder, and the pile is gone', () => {
+  const w = new World(9, 6); floor(w);
+  for (let x = 1; x < 8; x++) w.set(x, 4, A.POWDER);
+  w.set(0, 4, A.FIRE);
+  run(w, 30);
+  assert.equal(w.count(A.POWDER), 0);
+});
+
+test('powder far from any fire is left alone', () => {
+  const w = new World(11, 5); floor(w);
+  w.set(0, 3, A.POWDER); w.set(10, 3, A.FIRE);
+  run(w, 3);
+  assert.equal(w.get(0, 3), A.POWDER);
+});
