@@ -53,7 +53,7 @@ const pal = document.getElementById('palette');
 TOOLS.forEach((t, i) => {
   const b = document.createElement('button');
   const c = COLORS[t];
-  b.innerHTML = `<span class="sw" style="background:rgb(${c})"></span>${A.NAMES[t]} <small>${(i + 1) % 10}</small>`;
+  b.innerHTML = `<span class="sw" style="background:rgb(${c})"></span>${A.NAMES[t]}${i < 10 ? ` <small>${(i + 1) % 10}</small>` : ''}`;
   b.onclick = () => select(t);
   b.dataset.t = t;
   pal.appendChild(b);
