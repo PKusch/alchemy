@@ -221,3 +221,10 @@ test('powder far from any fire is left alone', () => {
   run(w, 3);
   assert.equal(w.get(0, 3), A.POWDER);
 });
+
+test('powder next to lava goes off', () => {
+  const w = new World(5, 5); floor(w);
+  w.set(1, 3, A.POWDER); w.set(2, 3, A.LAVA);
+  run(w, 5);
+  assert.equal(w.count(A.POWDER), 0);
+});
