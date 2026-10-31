@@ -228,3 +228,13 @@ test('powder next to lava goes off', () => {
   run(w, 5);
   assert.equal(w.count(A.POWDER), 0);
 });
+
+test('salt dissolving in water leaves the water as it was', () => {
+  const w = new World(3, 6); floor(w);
+  for (let y = 3; y < 5; y++) for (let x = 0; x < 3; x++) w.set(x, y, A.WATER);
+  const before = w.count(A.WATER);
+  w.set(1, 2, A.SALT);
+  run(w, 600);
+  assert.equal(w.count(A.SALT), 0);
+  assert.equal(w.count(A.WATER), before);
+});
