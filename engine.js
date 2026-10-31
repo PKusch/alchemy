@@ -1,14 +1,14 @@
 // The physics of the sandbox. No browser code in here, so it can be tested in Node.
 (function (root) {
   const EMPTY = 0, WALL = 1, SAND = 2, WATER = 3, FIRE = 4, SEED = 5,
-        PLANT = 6, ASH = 7, OIL = 8, STEAM = 9, LAVA = 10, STONE = 11, ICE = 12, SALT = 13, POWDER = 14;
-  const NAMES = ['erase', 'wall', 'sand', 'water', 'fire', 'seed', 'plant', 'ash', 'oil', 'steam', 'lava', 'stone', 'ice', 'salt', 'powder'];
+        PLANT = 6, ASH = 7, OIL = 8, STEAM = 9, LAVA = 10, STONE = 11, ICE = 12, SALT = 13, POWDER = 14, ACID = 15;
+  const NAMES = ['erase', 'wall', 'sand', 'water', 'fire', 'seed', 'plant', 'ash', 'oil', 'steam', 'lava', 'stone', 'ice', 'salt', 'powder', 'acid'];
   // How heavy each thing is. A falling thing sinks through anything lighter.
   const DENSITY = [];
   DENSITY[EMPTY] = 0; DENSITY[STEAM] = -1; DENSITY[OIL] = 1; DENSITY[ASH] = 1.5;
-  DENSITY[SEED] = 1.8; DENSITY[WATER] = 2; DENSITY[SALT] = 2.5; DENSITY[POWDER] = 2.8; DENSITY[SAND] = 3; DENSITY[LAVA] = 4;
-  const FALLS = new Set([SAND, SALT, POWDER, ASH, SEED, WATER, OIL, LAVA]);
-  const FLOWS = new Set([WATER, OIL, LAVA]);
+  DENSITY[SEED] = 1.8; DENSITY[WATER] = 2; DENSITY[SALT] = 2.5; DENSITY[ACID] = 2.2; DENSITY[POWDER] = 2.8; DENSITY[SAND] = 3; DENSITY[LAVA] = 4;
+  const FALLS = new Set([SAND, SALT, POWDER, ACID, ASH, SEED, WATER, OIL, LAVA]);
+  const FLOWS = new Set([WATER, OIL, LAVA, ACID]);
 
   function mulberry32(a) {
     return function () {
@@ -74,6 +74,7 @@
         if (t === LAVA) this.heat(x, y, i);
         if (t === SALT) this.dissolve(x, y);
         if (t === POWDER) this.detonate(x, y);
+        if (t === ACID) this.corrode(x, y);
         if (this.cells[i] !== t) continue;
         if (this.cells[i] !== t) continue;
         if (FALLS.has(t)) this.fall(t, x, y, i);
@@ -205,13 +206,25 @@
         if (this.get(x + dx, y + dy) === EMPTY && this.rand() < 0.5) this.set(x + dx, y + dy, FIRE);
   };
 
+  // Acid eats sand, stone, plants and walls it touches, and is spent doing it.
+  // It leaves water, ice and glassy lava alone.
+  const EATEN = new Set([SAND, STONE, WALL, PLANT, SEED, ASH, SALT]);
+  World.prototype.corrode = function (x, y) {
+    const spots = [[0, 1], [-1, 0], [1, 0], [0, -1]];
+    const s = spots[(this.rand() * spots.length) | 0];
+    if (EATEN.has(this.get(x + s[0], y + s[1])) && this.rand() < 0.3) {
+      this.set(x + s[0], y + s[1], EMPTY);
+      if (this.rand() < 0.4) this.set(x, y, EMPTY);
+    }
+  };
+
   World.prototype.count = function (t) {
     let n = 0;
     for (let i = 0; i < this.cells.length; i++) if (this.cells[i] === t) n++;
     return n;
   };
 
-  const api = { World, NAMES, EMPTY, WALL, SAND, WATER, FIRE, SEED, PLANT, ASH, OIL, STEAM, LAVA, STONE, ICE, SALT, POWDER, mulberry32 };
+  const api = { World, NAMES, EMPTY, WALL, SAND, WATER, FIRE, SEED, PLANT, ASH, OIL, STEAM, LAVA, STONE, ICE, SALT, POWDER, ACID, mulberry32 };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Alchemy = api;
 })(this);

@@ -238,3 +238,30 @@ test('salt dissolving in water leaves the water as it was', () => {
   assert.equal(w.count(A.SALT), 0);
   assert.equal(w.count(A.WATER), before);
 });
+
+test('acid sinks through oil', () => {
+  const w = new World(3, 8);
+  for (let x = 0; x < 3; x++) w.set(x, 7, A.ICE); // acid leaves ice alone
+  for (let x = 0; x < 3; x++) for (let y = 4; y < 6; y++) w.set(x, y, A.OIL);
+  w.set(1, 2, A.ACID);
+  run(w, 30);
+  let ay = -1;
+  for (let y = 0; y < 7; y++) for (let x = 0; x < 3; x++) if (w.get(x, y) === A.ACID) ay = y;
+  assert.equal(ay, 6);
+});
+
+test('acid eats a sand pile away', () => {
+  const w = new World(7, 6); floor(w);
+  for (let x = 1; x < 6; x++) w.set(x, 4, A.SAND);
+  for (let x = 1; x < 6; x++) w.set(x, 3, A.ACID);
+  const before = w.count(A.SAND);
+  run(w, 200);
+  assert.ok(w.count(A.SAND) < before, `${w.count(A.SAND)} sand left of ${before}`);
+});
+
+test('acid leaves water and ice alone', () => {
+  const w = new World(5, 5); floor(w);
+  w.set(1, 3, A.WATER); w.set(2, 3, A.ICE); w.set(3, 3, A.ACID);
+  run(w, 100);
+  assert.ok(w.count(A.WATER) + w.count(A.ICE) >= 2);
+});
