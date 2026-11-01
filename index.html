@@ -31,6 +31,7 @@
   <button id="pause">Pause</button>
   <button id="clear">Clear</button>
   <button id="demo">Surprise me</button>
+  <button id="save">Save picture</button>
 </div>
 <div class="hint">Drop seeds into water to grow a garden. Light it. Pour oil on the water first. Lava melts sand into wall and boils the sea. Ice melts near fire and lava, and slowly freezes water beside it. Salt melts ice. Powder goes off in a chain. Acid eats sand, stone, walls and plants. Keys 1–9 and 0 pick a material.</div>
 <script src="engine.js"></script>
@@ -93,6 +94,16 @@ addEventListener('pointerup', () => down = false);
 
 document.getElementById('pause').onclick = e => { paused = !paused; e.target.textContent = paused ? 'Play' : 'Pause'; };
 document.getElementById('clear').onclick = () => { world.cells.fill(0); world.life.fill(0); };
+document.getElementById('save').onclick = () => {
+  draw();
+  canvas.toBlob(blob => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'alchemy.png';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
+};
 document.getElementById('demo').onclick = () => {
   world.cells.fill(0); world.life.fill(0);
   const fill = (x0, y0, x1, y1, t) => { for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) world.set(x, y, t); };
