@@ -16,7 +16,7 @@ A tiny world where everything reacts to everything else. Pour, burn, boil and gr
 - Burn a garden and it leaves **ash** that floats on the water.
 - Drop **ice** into a pond and it slowly freezes the water around it. Put fire or lava next to it and it melts. Steam that touches it cools back into water.
 
-Pick materials with the buttons or keys 1 to 9 and 0 (ice). Salt, powder and acid have buttons only. **Space** pauses and plays, and **C** clears the world. "Surprise me" resets to a ready-made scene.
+Pick materials with the buttons or keys 1 to 9 and 0 (ice). Salt, powder and acid have buttons only. **Space** pauses and plays, and **C** clears the world. "Surprise me" resets to a ready-made scene, and "Save picture" downloads what you built as a PNG.
 
 ## How it works
 
