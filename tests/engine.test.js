@@ -290,8 +290,7 @@ test('salt leaves stone alone', () => {
 
 test('fire two cells away does not set off powder', () => {
   const w = new World(9, 4); floor(w);
-  w.set(2, 2, A.POWDER); w.set(4, 2, A.WALL); w.set(6, 2, A.WALL);
-  w.set(0, 2, A.WALL);
-  run(w, 2);
+  w.set(2, 2, A.POWDER); w.set(4, 2, A.FIRE);
+  w.step();
   assert.equal(w.get(2, 2), A.POWDER);
 });
