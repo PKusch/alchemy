@@ -280,3 +280,10 @@ test('acid eats a plant it touches', () => {
   run(w, 300);
   assert.equal(w.count(A.PLANT), 0);
 });
+
+test('salt leaves stone alone', () => {
+  const w = new World(5, 5); floor(w);
+  w.set(1, 3, A.STONE); w.set(2, 3, A.SALT);
+  run(w, 100);
+  assert.equal(w.get(1, 3), A.STONE);
+});
