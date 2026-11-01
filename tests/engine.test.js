@@ -273,3 +273,10 @@ test('acid eats through a wall it rests on', () => {
   run(w, 400);
   assert.ok(w.count(A.WALL) < 3);
 });
+
+test('acid eats a plant it touches', () => {
+  const w = new World(5, 5); floor(w);
+  w.set(2, 3, A.PLANT); w.set(2, 2, A.ACID);
+  run(w, 300);
+  assert.equal(w.count(A.PLANT), 0);
+});
