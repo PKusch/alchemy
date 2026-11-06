@@ -24,7 +24,7 @@
 </head>
 <body>
 <h1>Alchemy <span>Sandbox</span></h1>
-<canvas id="c" width="240" height="180"></canvas>
+<canvas id="c" width="240" height="180" role="img" aria-label="The sandbox. Drag on it to pour the chosen material."></canvas>
 <div class="bar" id="palette"></div>
 <div class="bar">
   <label>Brush <input id="size" type="range" min="1" max="8" value="3"></label>
@@ -61,7 +61,11 @@ TOOLS.forEach((t, i) => {
 });
 function select(t) {
   tool = t;
-  [...pal.children].forEach(b => b.classList.toggle('on', +b.dataset.t === t));
+  [...pal.children].forEach(b => {
+    const on = +b.dataset.t === t;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-pressed', on);
+  });
 }
 select(A.SAND);
 addEventListener('keydown', e => {
@@ -80,7 +84,7 @@ function dab(x, y) {
   const r = +document.getElementById('size').value;
   for (let dy = -r; dy <= r; dy++)
     for (let dx = -r; dx <= r; dx++)
-      if (dx * dx + dy * dy <= r * r && (tool !== A.WALL && tool !== A.PLANT || true)) {
+      if (dx * dx + dy * dy <= r * r) {
         if (tool === A.WALL || tool === A.EMPTY || tool === A.PLANT || tool === A.ICE || Math.random() < 0.5) world.paint(x + dx, y + dy, tool);
       }
 }
