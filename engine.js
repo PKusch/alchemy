@@ -212,8 +212,12 @@
   World.prototype.corrode = function (x, y) {
     const spots = [[0, 1], [-1, 0], [1, 0], [0, -1]];
     const s = spots[(this.rand() * spots.length) | 0];
-    if (EATEN.has(this.get(x + s[0], y + s[1])) && this.rand() < 0.3) {
-      this.set(x + s[0], y + s[1], EMPTY);
+    const nx = x + s[0], ny = y + s[1];
+    // Beyond the edge reads as wall, but there is nothing there to eat, so acid
+    // resting on the floor or against a side must not be spent on it.
+    if (nx < 0 || ny < 0 || nx >= this.w || ny >= this.h) return;
+    if (EATEN.has(this.get(nx, ny)) && this.rand() < 0.3) {
+      this.set(nx, ny, EMPTY);
       if (this.rand() < 0.4) this.set(x, y, EMPTY);
     }
   };

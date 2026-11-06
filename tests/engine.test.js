@@ -294,3 +294,13 @@ test('fire two cells away does not set off powder', () => {
   w.step();
   assert.equal(w.get(2, 2), A.POWDER);
 });
+
+test('acid resting on the edge of the world is not used up', () => {
+  // Beyond the edge reads as wall, and acid used to spend itself eating it.
+  const w = new World(20, 10, 7);
+  for (let x = 0; x < 20; x++) w.set(x, 9, A.ACID);
+  for (let y = 0; y < 9; y++) { w.set(0, y, A.ACID); w.set(19, y, A.ACID); }
+  const before = w.count(A.ACID);
+  run(w, 2000);
+  assert.equal(w.count(A.ACID), before);
+});
