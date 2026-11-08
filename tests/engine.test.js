@@ -304,3 +304,18 @@ test('acid resting on the edge of the world is not used up', () => {
   run(w, 2000);
   assert.equal(w.count(A.ACID), before);
 });
+
+test('the README says how many tests there are, in words, and it is right', () => {
+  // The count was edited by hand and fell behind once (35 when there were 38).
+  const fs = require('node:fs'), path = require('node:path');
+  const self = fs.readFileSync(__filename, 'utf8');
+  const n = (self.match(/^test\(/gm) || []).length;
+  const readme = fs.readFileSync(path.join(__dirname, '..', 'README.md'), 'utf8');
+  const m = readme.match(/^([A-Z][a-z]+(?:-[a-z]+)?) tests cover/m);
+  assert.ok(m, 'README has no "<Number> tests cover" line');
+  const units = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  const tens = { twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90 };
+  const [t, u = ''] = m[1].toLowerCase().split('-');
+  assert.ok(t in tens && units.includes(u), `cannot read "${m[1]}" as a number`);
+  assert.equal(tens[t] + units.indexOf(u), n, `README says ${m[1]}; this file has ${n} tests`);
+});
